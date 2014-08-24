@@ -1,0 +1,5 @@
+
+
+all:
+	moonc source build
+

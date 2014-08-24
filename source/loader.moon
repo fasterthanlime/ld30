@@ -1,4 +1,7 @@
 
+atl = require './libs/atl/Loader'
+atl.path = 'maps/'
+
 config = LD.config
 world = LD.world
 
@@ -7,7 +10,7 @@ world = LD.world
 -----------------------------------------------------------------
 
 load_fonts = ->
-  config.font = love.graphics.newFont "fonts/Asgalt-Regular.ttf", 58
+  config.font = love.graphics.newFont "fonts/Asgalt-Regular.ttf", 40
 
 
 -----------------------------------------------------------------
@@ -17,28 +20,43 @@ load_fonts = ->
 load_imgs = ->
   config.img = {}
 
-  with config.img
-    .square = love.graphics.newImage "img/square.png"
+  imgs = {
+    'square'
+    'circle'
+    'xblock'
+  }
+
+  for i, img in pairs imgs
+    config.img[img] = love.graphics.newImage "img/#{img}.png"
 
 -----------------------------------------------------------------
--- simple level text format, . = empty space, x = stuff
+-- simple map text format, . = empty space, x = stuff
 -----------------------------------------------------------------
 
-load_level = ->
-  file = love.filesystem.newFile "levels/level1.txt"
+load_map = (map_name) ->
+  print "Loading map #{map_name}"
+  map = atl.load map_name
 
-  row = 0
-  for line in file\lines!
-    row += 1
-    col = 0
+  first_layer = "error"
+  for k, v in pairs map.layers
+    first_layer = k
+    break
+  print "First layer = '#{first_layer}'"
 
-    for c, i in line\gmatch "."
-      col += 1
-      world.level.map[col][row] = c
+  world.level.blocks = {}
+  for col = 1, 16
+    world.level.blocks[col] = {}
 
-  file\close
+  for col0, row0, tile in map(first_layer)\iterate!
+    col, row = col0 + 1, row0 + 1
+    world.level.blocks[col][row] = tile.id
 
-  LD.print_map!
+    switch tile.id
+      when 33 -- depart
+        world.player.col = col
+        world.player.row = row
+
+  world.level.map = map
 
 -----------------------------------------------------------------
 -- joystick loading - no hotplugging, just use the first at startup
@@ -60,5 +78,5 @@ love.load = ->
   load_fonts()
   load_imgs()
   load_joystick()
-  load_level()
+  load_map("tuto1.tmx")
 

@@ -4,6 +4,7 @@ love.keypressed = function(key)
   local input = config.input.mapping[key]
   if input then
     world.pressed[input] = true
+    return LD.controlpressed(input)
   else
     local _exp_0 = key
     if 'escape' == _exp_0 then

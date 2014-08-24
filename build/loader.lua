@@ -1,39 +1,47 @@
+local atl = require('./libs/atl/Loader')
+atl.path = 'maps/'
 local config = LD.config
 local world = LD.world
 local load_fonts
 load_fonts = function()
-  config.font = love.graphics.newFont("fonts/Asgalt-Regular.ttf", 58)
+  config.font = love.graphics.newFont("fonts/Asgalt-Regular.ttf", 40)
 end
 local load_imgs
 load_imgs = function()
   config.img = { }
-  do
-    local _with_0 = config.img
-    _with_0.square = love.graphics.newImage("img/square.png")
-    return _with_0
+  local imgs = {
+    'square',
+    'circle',
+    'xblock'
+  }
+  for i, img in pairs(imgs) do
+    config.img[img] = love.graphics.newImage("img/" .. tostring(img) .. ".png")
   end
 end
-local load_level
-load_level = function()
-  local file = love.filesystem.newFile("levels/level1.txt")
-  local row = 0
-  for line in file:lines() do
-    row = row + 1
-    local col = 0
-    for c, i in line:gmatch(".") do
-      col = col + 1
-      world.level.map[col][row] = c
+local load_map
+load_map = function(map_name)
+  print("Loading map " .. tostring(map_name))
+  local map = atl.load(map_name)
+  local first_layer = "error"
+  for k, v in pairs(map.layers) do
+    first_layer = k
+    break
+  end
+  print("First layer = '" .. tostring(first_layer) .. "'")
+  world.level.blocks = { }
+  for col = 1, 16 do
+    world.level.blocks[col] = { }
+  end
+  for col0, row0, tile in map(first_layer):iterate() do
+    local col, row = col0 + 1, row0 + 1
+    world.level.blocks[col][row] = tile.id
+    local _exp_0 = tile.id
+    if 33 == _exp_0 then
+      world.player.col = col
+      world.player.row = row
     end
   end
-  local _
-  do
-    local _base_0 = file
-    local _fn_0 = _base_0.close
-    _ = function(...)
-      return _fn_0(_base_0, ...)
-    end
-  end
-  return LD.print_map()
+  world.level.map = map
 end
 local load_joystick
 load_joystick = function()
@@ -49,5 +57,5 @@ love.load = function()
   load_fonts()
   load_imgs()
   load_joystick()
-  return load_level()
+  return load_map("tuto1.tmx")
 end

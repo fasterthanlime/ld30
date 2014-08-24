@@ -1,5 +1,9 @@
 
+.PHONY: run all
+
+run: all
+	love build	
 
 all:
-	moonc source build
+	cd source && moonc -t ../build .
 

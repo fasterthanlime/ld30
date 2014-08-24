@@ -37,8 +37,7 @@ load_map = function(map_name)
     world.level.blocks[col][row] = tile.id
     local _exp_0 = tile.id
     if 33 == _exp_0 then
-      world.player.col = col
-      world.player.row = row
+      world:warp_player(col, row)
     end
   end
   world.level.map = map

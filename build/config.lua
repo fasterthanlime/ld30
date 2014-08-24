@@ -8,6 +8,9 @@ LD.config = {
     }
   },
   gameplay = {
-    player_speed = 5
+    tween = {
+      duration = 0.25,
+      easing = 'inOutQuad'
+    }
   }
 }

@@ -1,5 +1,10 @@
 
-world = {
+tween = require './libs/tween/tween'
+
+config = LD.config
+
+class World
+
   pressed: {
     left: false
     right: false
@@ -14,15 +19,80 @@ world = {
     y: 0
   }
 
+  side: 16
+  width: 48
+
   level: {
-    side: 16
     blocks: {}
     map: {}
   }
-}
 
-for col = 1, world.level.side
-  world.level.map[col] = {}
+  new: =>
+    for col = 1, @side
+      @level.map[col] = {}
 
-LD.world = world
+  to_pixels: (col, row) =>
+    width = @width
+    return (col - 1) * width, (row - 1) * width
+
+  warp_player: (col, row) =>
+    with @player
+      .col, .row = col, row
+      .x, .y = @to_pixels col, row
+
+  is_player_moving: =>
+    @player.tween != nil
+
+  move_player: (dcol, drow) =>
+    if @is_player_moving!
+      @next_move = { dcol, drow }
+      return
+
+    col = @player.col + dcol
+    row = @player.row + drow
+
+    while @can_move_to(col, row)
+      @player.col = col
+      @player.row = row
+
+      col = @player.col + dcol
+      row = @player.row + drow
+
+    x, y = @to_pixels(@player.col, @player.row)
+
+    with config.gameplay.tween
+      @player.tween = tween.new .duration, @player, { x: x, y: y }, .easing
+
+  update: (dt) =>
+    if @is_player_moving!
+      done = @player.tween\update(dt)
+      if done
+        @player.tween = nil
+        if @next_move
+          move = @next_move
+          @next_move = nil
+          @move_player move[1], move[2]
+    else
+      with @player
+        @check_win .col, .row
+
+  can_move_to: (col, row) =>
+    return false if col > @side
+    return false if row > @side
+    return false if col < 1
+    return false if row < 1
+
+    return switch @level.blocks[col][row]
+      when 17
+        false
+      else
+        true
+
+  check_win: (col, row) =>
+    switch @level.blocks[col][row]
+      when 34
+        print "You win!"
+        love.event.quit()
+
+LD.world = World!
 

@@ -53,8 +53,7 @@ load_map = (map_name) ->
 
     switch tile.id
       when 33 -- depart
-        world.player.col = col
-        world.player.row = row
+        world\warp_player col, row
 
   world.level.map = map
 

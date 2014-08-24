@@ -1,22 +1,12 @@
 LD = { }
+require('./utils')
 require('./config')
 require('./world')
 require('./input')
+require('./loader')
 local config = LD.config
 local world = LD.world
 local input = LD.input
-love.load = function()
-  config.font = love.graphics.newFont("fonts/Asgalt-Regular.ttf", 80)
-  config.img = { }
-  config.img.square = love.graphics.newImage("img/square.png")
-  local joystick_count = love.joystick.getJoystickCount()
-  if joystick_count > 0 then
-    print(tostring(joystick_count) .. " joysticks found, using first.")
-    config.joystick = love.joystick.getJoysticks()[1]
-  else
-    return print("No joysticks found!")
-  end
-end
 love.update = function(dt)
   local speed = config.gameplay.player_speed
   do
@@ -43,8 +33,8 @@ love.update = function(dt)
 end
 love.draw = function()
   love.graphics.setFont(config.font)
-  local side = 128
-  local nc = 6
+  local side = 96
+  local nc = 8
   for row = 0, nc - 1 do
     for col = 0, nc - 1 do
       love.graphics.draw(config.img.square, row * side, col * side)

@@ -1,28 +1,17 @@
 
 export LD = {}
 
+require './utils'
 require './config'
 require './world'
 require './input'
+require './loader'
 
 -- imports (kinda)
 config = LD.config
 world = LD.world
 input = LD.input
 
--- load resources
-love.load = ->
-  config.font = love.graphics.newFont "fonts/Asgalt-Regular.ttf", 80
-  config.img = {}
-  config.img.square = love.graphics.newImage "img/square.png"
-
-  joystick_count = love.joystick.getJoystickCount()
-  if joystick_count > 0
-    print "#{joystick_count} joysticks found, using first."
-    config.joystick = love.joystick.getJoysticks()[1]
-  else
-    print "No joysticks found!"
- 
 -- update tick
 love.update = (dt) ->
   speed = config.gameplay.player_speed
@@ -47,8 +36,8 @@ love.update = (dt) ->
 love.draw = ->
   love.graphics.setFont config.font
 
-  side = 128
-  nc = 6
+  side = 96
+  nc = 8
 
   for row = 0, nc - 1
     for col = 0, nc - 1

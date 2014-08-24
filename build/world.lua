@@ -1,4 +1,4 @@
-LD.world = {
+local world = {
   pressed = {
     left = false,
     right = false,
@@ -8,5 +8,12 @@ LD.world = {
   player = {
     x = 30,
     y = 30
+  },
+  level = {
+    map = { }
   }
 }
+for col = 1, 8 do
+  world.level.map[col] = { }
+end
+LD.world = world

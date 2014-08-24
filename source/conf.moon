@@ -2,7 +2,7 @@
 love.conf = (t) ->
   t.version = "0.9.1"
 
-  side = 6 * 128
+  side = 8 * 96
   with t.window
     .width = side
     .height = side

@@ -1,6 +1,6 @@
 love.conf = function(t)
   t.version = "0.9.1"
-  local side = 6 * 128
+  local side = 8 * 96
   do
     local _with_0 = t.window
     _with_0.width = side

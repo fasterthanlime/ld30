@@ -23,16 +23,19 @@ LD.controlpressed = function(control)
     return world:move_player(0, -1)
   elseif 'down' == _exp_0 then
     return world:move_player(0, 1)
+  elseif 'reload' == _exp_0 then
+    return world:reload()
+  elseif 'skip' == _exp_0 then
+    return world:skip()
   end
 end
 love.draw = function()
   love.graphics.setColor(100, 140, 255, 255)
   world.level.map:draw()
   love.graphics.setColor(200, 200, 70, 255)
-  do
-    local _with_0 = world.player
-    love.graphics.draw(config.img.tileset, world.player.quad, _with_0.x, _with_0.y)
-    return _with_0
+  for num, player in ipairs(world.players) do
+    local quad = world.player_quads[player.val]
+    love.graphics.draw(config.img.tileset, quad, player.x, player.y)
   end
 end
 love.update = function(dt)

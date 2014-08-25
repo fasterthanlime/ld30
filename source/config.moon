@@ -6,6 +6,8 @@ LD.config = {
       'right': 'right'
       'up': 'up'
       'down': 'down'
+      'r': 'reload'
+      's': 'skip'
     }
   }
 

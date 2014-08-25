@@ -4,7 +4,9 @@ LD.config = {
       ['left'] = 'left',
       ['right'] = 'right',
       ['up'] = 'up',
-      ['down'] = 'down'
+      ['down'] = 'down',
+      ['r'] = 'reload',
+      ['s'] = 'skip'
     }
   },
   gameplay = {

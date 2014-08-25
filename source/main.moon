@@ -29,6 +29,10 @@ LD.controlpressed = (control) ->
       world\move_player 0, -1
     when 'down'
       world\move_player 0, 1
+    when 'reload'
+      world\reload!
+    when 'skip'
+      world\skip!
 
 -- draw (I love these comments things.)
 love.draw = ->
@@ -36,8 +40,10 @@ love.draw = ->
   world.level.map\draw!
 
   love.graphics.setColor 200, 200, 70, 255
-  with world.player
-    love.graphics.draw config.img.tileset, world.player.quad, .x, .y
+
+  for num, player in ipairs world.players
+    quad = world.player_quads[player.val]
+    love.graphics.draw config.img.tileset, quad, player.x, player.y
 
 -- update tick
 love.update = (dt) ->

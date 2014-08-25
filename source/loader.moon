@@ -56,19 +56,22 @@ class Loader
     if config.current_map > #config.maps
       return false -- reached end of maps
 
+    world\reset!
+
     map_name = config.maps[config.current_map]
-    print "Loading map #{map_name}"
+    print ">>> Loading map #{map_name}"
     map = atl.load "#{map_name}.tmx"
 
     first_layer = "error"
     for k, v in pairs map.layers
       first_layer = k
       break
-    print "First layer = '#{first_layer}'"
 
     world.level.blocks = {}
     for col = 1, 16
       world.level.blocks[col] = {}
+      for row = 1, 16
+        world.level.blocks[col][row] = 0
 
     for col0, row0, tile in map(first_layer)\iterate!
       col, row = col0 + 1, row0 + 1
@@ -76,7 +79,9 @@ class Loader
 
       switch tile.id
         when 33 -- depart
-          world\warp_player col, row
+          -- don't draw it
+          map(first_layer)\set(col0, row0, map.tiles[0])
+          world\new_player col, row
 
     world.level.map = map
     true

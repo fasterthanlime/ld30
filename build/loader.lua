@@ -30,25 +30,29 @@ do
       if config.current_map > #config.maps then
         return false
       end
+      world:reset()
       local map_name = config.maps[config.current_map]
-      print("Loading map " .. tostring(map_name))
+      print(">>> Loading map " .. tostring(map_name))
       local map = atl.load(tostring(map_name) .. ".tmx")
       local first_layer = "error"
       for k, v in pairs(map.layers) do
         first_layer = k
         break
       end
-      print("First layer = '" .. tostring(first_layer) .. "'")
       world.level.blocks = { }
       for col = 1, 16 do
         world.level.blocks[col] = { }
+        for row = 1, 16 do
+          world.level.blocks[col][row] = 0
+        end
       end
       for col0, row0, tile in map(first_layer):iterate() do
         local col, row = col0 + 1, row0 + 1
         world.level.blocks[col][row] = tile.id
         local _exp_0 = tile.id
         if 33 == _exp_0 then
-          world:warp_player(col, row)
+          map(first_layer):set(col0, row0, map.tiles[0])
+          world:new_player(col, row)
         end
       end
       world.level.map = map

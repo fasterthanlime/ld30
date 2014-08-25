@@ -30,15 +30,14 @@ LD.controlpressed = (control) ->
     when 'down'
       world\move_player 0, 1
 
-set_opacity = (opacity) ->
-  love.graphics.setColor 255, 255, 255, opacity
-
 -- draw (I love these comments things.)
 love.draw = ->
+  love.graphics.setColor 100, 140, 255, 255
   world.level.map\draw!
 
+  love.graphics.setColor 200, 200, 70, 255
   with world.player
-    love.graphics.draw config.img.circle, .x, .y
+    love.graphics.draw config.img.tileset, world.player.quad, .x, .y
 
 -- update tick
 love.update = (dt) ->

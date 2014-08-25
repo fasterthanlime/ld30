@@ -2,6 +2,7 @@
 tween = require './libs/tween/tween'
 
 config = LD.config
+loader = LD.loader
 
 class World
 
@@ -30,6 +31,8 @@ class World
   new: =>
     for col = 1, @side
       @level.map[col] = {}
+
+    @player.quad = love.graphics.newQuad 0, 0, @width, @width, @side * @width, @side * @width
 
   to_pixels: (col, row) =>
     width = @width
@@ -91,8 +94,10 @@ class World
   check_win: (col, row) =>
     switch @level.blocks[col][row]
       when 34
-        print "You win!"
-        love.event.quit()
+        config.current_map += 1
+        unless LD.loader\load_map!
+          print "You win!"
+          love.event.quit()
 
 LD.world = World!
 

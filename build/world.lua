@@ -1,5 +1,6 @@
 local tween = require('./libs/tween/tween')
 local config = LD.config
+local loader = LD.loader
 local World
 do
   local _base_0 = {
@@ -104,8 +105,11 @@ do
     check_win = function(self, col, row)
       local _exp_0 = self.level.blocks[col][row]
       if 34 == _exp_0 then
-        print("You win!")
-        return love.event.quit()
+        config.current_map = config.current_map + 1
+        if not (LD.loader:load_map()) then
+          print("You win!")
+          return love.event.quit()
+        end
       end
     end
   }
@@ -115,6 +119,7 @@ do
       for col = 1, self.side do
         self.level.map[col] = { }
       end
+      self.player.quad = love.graphics.newQuad(0, 0, self.width, self.width, self.side * self.width, self.side * self.width)
     end,
     __base = _base_0,
     __name = "World"

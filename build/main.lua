@@ -25,15 +25,13 @@ LD.controlpressed = function(control)
     return world:move_player(0, 1)
   end
 end
-local set_opacity
-set_opacity = function(opacity)
-  return love.graphics.setColor(255, 255, 255, opacity)
-end
 love.draw = function()
+  love.graphics.setColor(100, 140, 255, 255)
   world.level.map:draw()
+  love.graphics.setColor(200, 200, 70, 255)
   do
     local _with_0 = world.player
-    love.graphics.draw(config.img.circle, _with_0.x, _with_0.y)
+    love.graphics.draw(config.img.tileset, world.player.quad, _with_0.x, _with_0.y)
     return _with_0
   end
 end

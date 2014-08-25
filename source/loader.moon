@@ -8,8 +8,12 @@ world = LD.world
 class Loader
   new: =>
     config.maps = {
+      "tuto6"
+      "tuto5"
+      "tuto4"
       "tuto1"
       "tuto2"
+      "tuto3"
     }
     config.current_map = 1
 
@@ -75,13 +79,19 @@ class Loader
 
     for col0, row0, tile in map(first_layer)\iterate!
       col, row = col0 + 1, row0 + 1
-      world.level.blocks[col][row] = tile.id
+      new_id = nil
+      tile_id = tile.id
 
-      switch tile.id
-        when 33 -- depart
+      switch tile_id
+        when 33 -- spawn
           -- don't draw it
-          map(first_layer)\set(col0, row0, map.tiles[0])
+          tile_id = 0
           world\new_player col, row
+
+      if tile_id != tile.id
+        map(first_layer)\set(col0, row0, map.tiles[tile_id])
+
+      world.level.blocks[col][row] = tile_id
 
     world.level.map = map
     true

@@ -48,12 +48,17 @@ do
       end
       for col0, row0, tile in map(first_layer):iterate() do
         local col, row = col0 + 1, row0 + 1
-        world.level.blocks[col][row] = tile.id
-        local _exp_0 = tile.id
+        local new_id = nil
+        local tile_id = tile.id
+        local _exp_0 = tile_id
         if 33 == _exp_0 then
-          map(first_layer):set(col0, row0, map.tiles[0])
+          tile_id = 0
           world:new_player(col, row)
         end
+        if tile_id ~= tile.id then
+          map(first_layer):set(col0, row0, map.tiles[tile_id])
+        end
+        world.level.blocks[col][row] = tile_id
       end
       world.level.map = map
       return true
@@ -72,8 +77,12 @@ do
   local _class_0 = setmetatable({
     __init = function(self)
       config.maps = {
+        "tuto6",
+        "tuto5",
+        "tuto4",
         "tuto1",
-        "tuto2"
+        "tuto2",
+        "tuto3"
       }
       config.current_map = 1
     end,
